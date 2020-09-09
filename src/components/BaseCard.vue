@@ -1,6 +1,10 @@
 <template>
   <div class="card">
-    <div class="header" v-if="!!header">{{ header }}</div>
+    <div class="header">
+      <slot name="header" :header="header">
+        <span v-if="!!header">{{ header }}</span>
+      </slot>
+    </div>
     <div class="body">
       <slot></slot>
     </div>

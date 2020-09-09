@@ -1,5 +1,14 @@
 <template>
-  <base-card :header="cardHeader">
+  <base-card>
+    <template v-slot:header>
+      <input
+        class="city-search-input"
+        v-model="cityName"
+        @keyup.enter="$emit('search', cityName)"
+        :size="cityName.length || 1"
+      />
+      <span class="date-details">{{ dateDetails }}</span>
+    </template>
     <span class="main-data">
       <div class="condition-info">
         <weather-icon class="condition-icon" :conditionId="details.condition"></weather-icon>
@@ -33,28 +42,45 @@ export default {
     },
   },
   computed: {
-    cardHeader() {
-      return `${this.details.city} - ${extendDate(
-        this.details.date
-      )}, ${extendWeekday(this.details.weekday)}`;
+    cityName: {
+      get() {
+        console.log(this.details);
+        return this.details.city;
+      },
+      set(value) {
+        this.details.city = value;
+      },
+    },
+    dateDetails() {
+      return `${extendDate(this.details.date)}, ${extendWeekday(
+        this.details.weekday
+      )}`;
     },
   },
 };
 </script>
 <style scoped>
+.city-search-input {
+  font-size: 24px;
+  border: none;
+  border-bottom: solid rgba(0, 0, 0, 0.3) 1px;
+  text-align: center;
+  transition: border-bottom-color 500ms;
+}
+.city-search-input:hover {
+  border-bottom-color: black;
+}
 .complementary-data {
   display: grid;
   grid-template-columns: 33%;
   grid-template-rows: auto;
 }
-span {
+.date-details::before {
+  content: " - ";
+}
+span:not(.date-details) {
   font-size: 18px;
   margin: 4px 0;
-}
-.temperature {
-  font-weight: 200;
-  font-size: 40px;
-  align-self: center;
 }
 .condition-info {
   display: flex;
@@ -67,6 +93,11 @@ span {
   margin-bottom: 24px;
   display: flex;
   flex-direction: row;
+}
+.temperature {
+  font-weight: 200;
+  font-size: 40px !important;
+  align-self: center;
 }
 .data-one {
   grid-column-start: 1;

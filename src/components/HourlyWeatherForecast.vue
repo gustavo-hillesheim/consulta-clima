@@ -1,10 +1,7 @@
 <template>
   <div>
-    <base-select
-      :options="chartTypeOptions"
-      @select="chartType = $event"
-    ></base-select>
-    <line-chart :key="chartType" :config="chartConfig"></line-chart>
+    <base-select :options="chartTypeOptions" @select="chartType = $event"></base-select>
+    <line-chart :key="chartConfig" :config="chartConfig"></line-chart>
   </div>
 </template>
 <script>

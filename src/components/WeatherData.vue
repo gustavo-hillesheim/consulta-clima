@@ -1,7 +1,11 @@
 <template>
   <div v-if="weather" class="content">
     <div class="main">
-      <weather-details class="current-weather" :details="weather.dayDetails"></weather-details>
+      <weather-details
+        class="current-weather"
+        :details="weather.dayDetails"
+        @search="loadData($event)"
+      ></weather-details>
       <daily-weather-forecast class="week-weather" :forecasts="weekForecasts"></daily-weather-forecast>
     </div>
     <div class="forecasts">
@@ -33,19 +37,7 @@ export default {
     cityName: "Blumenau,SC",
   }),
   created() {
-    if (this.cityName) {
-      this.loadWeatherData({
-        cityName: this.cityName,
-      });
-    } else {
-      navigator.geolocation.getCurrentPosition(
-        ({ coords }) => this.loadWeatherData(coords),
-        () =>
-          this.loadWeatherData({
-            cityName: this.cityName,
-          })
-      );
-    }
+    this.loadData(this.cityName);
   },
   computed: {
     weekForecasts() {
@@ -56,7 +48,22 @@ export default {
     },
   },
   methods: {
-    loadWeatherData(searchData) {
+    loadData(cityName) {
+      if (cityName) {
+        this.requestData({
+          cityName: cityName,
+        });
+      } else {
+        navigator.geolocation.getCurrentPosition(
+          ({ coords }) => this.requestData(coords),
+          () =>
+            this.requestData({
+              cityName: cityName,
+            })
+        );
+      }
+    },
+    requestData(searchData) {
       getWeatherForecast(searchData).then(
         (weather) => (this.weather = weather)
       );
