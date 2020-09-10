@@ -2,7 +2,7 @@
   <base-card :header="cardHeader">
     <span class="spacer"></span>
     <base-select :options="chartTypeOptions" @select="chartType = $event"></base-select>
-    <line-chart :key="chartConfig" :config="chartConfig"></line-chart>
+    <line-chart :key="chartConfig.id" :config="chartConfig"></line-chart>
   </base-card>
 </template>
 <script>
@@ -54,7 +54,7 @@ export default {
     },
     chartConfig() {
       return {
-        id: "daily-forecast",
+        id: "daily-forecast-" + new Date().getTime(),
         title: this.typeTranslation[this.chartType] + " ao longo da semana",
         height: 300,
         data: this.chartData,

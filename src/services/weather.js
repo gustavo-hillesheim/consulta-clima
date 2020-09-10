@@ -9,17 +9,20 @@ const requestSettings = {
 };
 
 const getWeatherForecast = function(searchData = {}) {
-  const { latitude, longitude, cityName } = searchData;
+  const { latitude, longitude, searchPlace } = searchData;
 
-  if (!cityName) {
-    return getCityNameByGeolocation({ latitude, longitude }).then((cityName) =>
-      getWeather({ latitude, longitude, cityName })
-    );
+  if (!searchPlace) {
+    return getSearchPlaceByGeolocation({
+      latitude,
+      longitude,
+    }).then((searchPlace) => getWeather({ latitude, longitude, searchPlace }));
   }
-  return getGeolocationBySearch(cityName).then((params) => getWeather(params));
+  return getGeolocationBySearchPlace(searchPlace).then((params) =>
+    getWeather(params)
+  );
 };
 
-function getCityNameByGeolocation({ latitude, longitude }) {
+function getSearchPlaceByGeolocation({ latitude, longitude }) {
   const cityNameUrl = window.__env.cityNameUrl;
   return fetch(
     `${cityNameUrl}?lat=${latitude}&lon=${longitude}&format=json`,
@@ -37,8 +40,8 @@ function getCityNameByGeolocation({ latitude, longitude }) {
   });
 }
 
-function getGeolocationBySearch(cityName) {
-  const segments = cityName.split(",");
+function getGeolocationBySearchPlace(searchPlace) {
+  const segments = searchPlace.split(",");
   const city = segments[0].trim();
   let state = (segments[1] || "").trim();
   const geolocationUrl = window.__env.geolocationUrl;

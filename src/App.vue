@@ -1,22 +1,12 @@
 <template>
-  <div class="layout">
-    <div class="header"></div>
-    <div class="body">
-      <weather-data></weather-data>
-    </div>
-    <div class="loader-container" v-if="applicationState.isLoading">
-      <div class="loader">
-        <div class="loader-spinner"></div>Carregando...
-      </div>
-    </div>
-  </div>
+  <weather-page></weather-page>
 </template>
 <script>
-import WeatherData from "./components/WeatherData.vue";
+import WeatherPage from "./pages/WeatherPage";
 
 export default {
   name: "app-home",
-  components: { WeatherData },
+  components: { WeatherPage },
   provide() {
     return {
       applicationState: this.applicationState,
@@ -25,17 +15,15 @@ export default {
   data: () => ({
     applicationState: {
       isLoading: false,
+      hasError: false,
     },
   }),
 };
 </script>
-<style scoped>
-.layout {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  min-width: 100vh;
+<style>
+body {
+  margin: 0;
+  font-family: monospace;
   background: linear-gradient(
     90deg,
     rgba(63, 175, 247, 0.8) 0%,
@@ -43,26 +31,19 @@ export default {
   );
 }
 
-.header {
-  max-height: 50px;
-  display: flex;
-  flex-direction: row;
-  background-color: transparent;
+* {
+  box-sizing: border-box;
 }
 
-.header .title {
-  color: white;
-  font-size: 28px;
-  margin: auto 24px;
+.search-input {
+  font-size: 24px;
+  border: none;
+  border-bottom: solid rgba(0, 0, 0, 0.3) 1px;
+  text-align: center;
+  transition: border-bottom-color 500ms;
 }
 
-.body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.loader-container {
+.foreground-overlay {
   background-color: rgba(255, 255, 255, 0.7);
   position: absolute;
   top: 0;
@@ -71,7 +52,7 @@ export default {
   height: 100%;
 }
 
-.loader {
+.screen-center {
   margin-left: 50vw;
   margin-top: 50vh;
   width: fit-content;
@@ -79,24 +60,5 @@ export default {
   transform: translate(-50%, -50%);
   text-align: center;
   font-size: 20px;
-}
-
-.loader-spinner {
-  margin: 12px auto;
-  width: 100px;
-  height: 100px;
-  border: 12px solid lightgrey;
-  border-top: 12px solid rgba(63, 175, 247);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
 }
 </style>

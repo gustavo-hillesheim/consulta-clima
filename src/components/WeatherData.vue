@@ -4,7 +4,7 @@
       <weather-details
         class="current-weather"
         :details="weather.dayDetails"
-        @search="loadData($event)"
+        @search="$emit('search', $event)"
       ></weather-details>
       <daily-weather-forecast class="week-weather" :forecasts="weekForecasts"></daily-weather-forecast>
     </div>
@@ -16,14 +16,13 @@
         :forecast="forecast"
       ></weather-forecast>
     </div>
-    <a href="https://www.freepik.com/vectors/snow">Icons created by bamdewanto - www.freepik.com</a>
   </div>
 </template>
 <script>
 import WeatherDetails from "./WeatherDetails.vue";
 import WeatherForecast from "./WeatherForecast.vue";
 import DailyWeatherForecast from "./DailyWeatherForecast.vue";
-import { getWeatherForecast } from "../services/weather";
+import { WeatherApiResponse } from "../models/weather-api-response";
 
 export default {
   name: "weather-data",
@@ -33,53 +32,19 @@ export default {
     DailyWeatherForecast,
   },
   inject: ["applicationState"],
-  data: () => ({
-    weather: null,
-    cityName: null,
-  }),
-  created() {
-    this.cityName = localStorage.getItem("cidade-consulta") || "São Paulo,SP";
-    this.loadData(this.cityName);
+  props: {
+    weather: WeatherApiResponse,
   },
   computed: {
     weekForecasts() {
       return [
-        this.getForecastData(this.weather.dayDetails),
-        ...this.weather.forecast.map(this.getForecastData),
+        this.mapForecastData(this.weather.dayDetails),
+        ...this.weather.forecast.map(this.mapForecastData),
       ];
     },
   },
   methods: {
-    loadData(cityName) {
-      if (cityName) {
-        this.requestData({
-          cityName: cityName,
-        });
-      } else {
-        navigator.geolocation.getCurrentPosition(
-          ({ coords }) => this.requestData(coords),
-          () =>
-            this.requestData({
-              cityName: cityName,
-            })
-        );
-      }
-    },
-    requestData(searchData) {
-      this.applicationState.isLoading = true;
-      getWeatherForecast(searchData)
-        .then((weather) => {
-          this.weather = weather;
-          this.cityName = weather.dayDetails.city;
-          localStorage.setItem("cidade-consulta", this.cityName);
-          this.applicationState.isLoading = false;
-        })
-        .catch((error) => {
-          console.error("Erro na chamada da API", error);
-          this.applicationState.isLoading = false;
-        });
-    },
-    getForecastData(weather) {
+    mapForecastData(weather) {
       return {
         date: weather.date,
         weekday: weather.weekday,

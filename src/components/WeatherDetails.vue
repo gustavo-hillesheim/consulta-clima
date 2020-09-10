@@ -2,7 +2,7 @@
   <base-card>
     <template v-slot:header>
       <input
-        class="city-search-input"
+        class="search-input"
         v-model="cityName"
         @keyup.enter="$emit('search', cityName)"
         :size="cityName.length || 1"
@@ -59,13 +59,6 @@ export default {
 };
 </script>
 <style scoped>
-.city-search-input {
-  font-size: 24px;
-  border: none;
-  border-bottom: solid rgba(0, 0, 0, 0.3) 1px;
-  text-align: center;
-  transition: border-bottom-color 500ms;
-}
 .city-search-input:hover {
   border-bottom-color: black;
 }
