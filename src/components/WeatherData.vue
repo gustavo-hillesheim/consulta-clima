@@ -32,6 +32,7 @@ export default {
     WeatherForecast,
     DailyWeatherForecast,
   },
+  inject: ["applicationState"],
   data: () => ({
     weather: null,
     cityName: null,
@@ -65,11 +66,18 @@ export default {
       }
     },
     requestData(searchData) {
-      getWeatherForecast(searchData).then((weather) => {
-        this.weather = weather;
-        this.cityName = weather.dayDetails.city;
-        localStorage.setItem("cidade-consulta", this.cityName);
-      });
+      this.applicationState.isLoading = true;
+      getWeatherForecast(searchData)
+        .then((weather) => {
+          this.weather = weather;
+          this.cityName = weather.dayDetails.city;
+          localStorage.setItem("cidade-consulta", this.cityName);
+          this.applicationState.isLoading = false;
+        })
+        .catch((error) => {
+          console.error("Erro na chamada da API", error);
+          this.applicationState.isLoading = false;
+        });
     },
     getForecastData(weather) {
       return {

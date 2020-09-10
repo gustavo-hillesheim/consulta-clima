@@ -10,12 +10,9 @@
       <span class="date-details">{{ dateDetails }}</span>
     </template>
     <span class="main-data">
-      <div class="condition-info">
+      <div class="condition-info" :title="details.condition | weatherCondition">
         <weather-icon class="condition-icon" :conditionId="details.condition"></weather-icon>
-        <span
-          class="condition-label"
-          :title="details.condition | weatherCondition"
-        >{{ details.condition | weatherCondition }}</span>
+        <span class="condition-label">{{ details.condition | weatherCondition }}</span>
       </div>
       <span class="temperature">{{ details.temperature }}ºC</span>
     </span>

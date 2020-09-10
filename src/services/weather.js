@@ -26,7 +26,11 @@ function getCityNameByGeolocation({ latitude, longitude }) {
     requestSettings
   ).then(async (response) => {
     if (response.ok) {
-      const address = (await response.json()).address;
+      const responseData = await response.json();
+      if (!responseData || !responseData.address) {
+        return Promise.reject("Erro ao obter descrição da localização");
+      }
+      const address = responseData.address;
       return getCityNameByAddress(address);
     }
     return Promise.reject("City Name API error");
@@ -34,13 +38,22 @@ function getCityNameByGeolocation({ latitude, longitude }) {
 }
 
 function getGeolocationBySearch(cityName) {
+  const segments = cityName.split(",");
+  const city = segments[0].trim();
+  let state = (segments[1] || "").trim();
   const geolocationUrl = window.__env.geolocationUrl;
-  return fetch(
-    `${geolocationUrl}?q=${cityName}&format=jsonv2&addressdetails=1&country=Brazil`,
-    requestSettings
-  ).then(async (response) => {
+
+  let requestUrl = `${geolocationUrl}?city=${city}&country=Brazil&format=jsonv2&addressdetails=1`;
+  if (state) {
+    requestUrl += "&state=" + state;
+  }
+  return fetch(requestUrl, requestSettings).then(async (response) => {
     if (response.ok) {
-      const data = (await response.json())[0];
+      const responseData = await response.json();
+      if (!responseData || !responseData.length) {
+        return Promise.reject("Erro ao obter geolocalização da cidade");
+      }
+      const data = responseData[0];
       return {
         latitude: data.lat,
         longitude: data.lon,
