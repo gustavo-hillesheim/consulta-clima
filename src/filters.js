@@ -86,6 +86,35 @@ const weatherConditionsDescription = {
   804: "nublado",
 };
 
+const statesInitials = {
+  ac: "Acre",
+  al: "Alagoas",
+  ap: "Amapá",
+  am: "Amazonas",
+  ba: "Bahia",
+  ce: "Ceará",
+  df: "Distrito Federal",
+  es: "Espírito Santo",
+  go: "Goiás",
+  ma: "Maranhão",
+  mt: "Mato Grosso",
+  ms: "Mato Grosso do Sul",
+  pa: "Pará",
+  pb: "Paraíba",
+  pr: "Paraná",
+  pe: "Pernambuco",
+  pi: "Piauí",
+  rj: "Rio de Janeiro",
+  rn: "Rio Grando do Norte",
+  rs: "Rio Grande do Sul",
+  ro: "Rondônia",
+  rr: "Roraima",
+  sc: "Santa Catarina",
+  sp: "São Paulo",
+  se: "Sergipe",
+  to: "Tocantins",
+};
+
 function extendDate(date) {
   const [day, month] = date.split("/");
   return `${day} de ${extendedMonths[month]}`;
@@ -111,10 +140,30 @@ function weatherCondition(conditionId) {
     "Condição desconhecida"}`;
 }
 
+function shortState(state) {
+  if (!state) {
+    return "NA";
+  }
+  const foundInitial = Object.keys(statesInitials).find((initial) => {
+    const currentState = statesInitials[initial];
+    return state.toLowerCase() === currentState.toLowerCase();
+  });
+  return (foundInitial || "NA").toUpperCase();
+}
+
+function extendState(stateInitial) {
+  const foundState = Object.keys(statesInitials).find(
+    (initial) => initial.toLowerCase() === stateInitial.toLowerCase()
+  );
+  return foundState || "Desconhecido";
+}
+
 module.exports = {
   extendDate,
   formatDate,
   extendWeekday,
   weatherCondition,
   shortWeekday,
+  shortState,
+  extendState,
 };

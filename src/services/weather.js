@@ -1,4 +1,5 @@
 import { WeatherApiResponse } from "../models/weather-api-response.js";
+import { shortState } from "../filters";
 
 const requestSettings = {
   method: "GET",
@@ -15,9 +16,7 @@ const getWeatherForecast = function(searchData = {}) {
       getWeather({ latitude, longitude, cityName })
     );
   }
-  return getGeolocationByCityName(cityName).then(({ latitude, longitude }) =>
-    getWeather({ latitude, longitude, cityName })
-  );
+  return getGeolocationBySearch(cityName).then((params) => getWeather(params));
 };
 
 function getCityNameByGeolocation({ latitude, longitude }) {
@@ -27,19 +26,17 @@ function getCityNameByGeolocation({ latitude, longitude }) {
     requestSettings
   ).then(async (response) => {
     if (response.ok) {
-      const data = await response.json();
-      return (
-        data.address.city || data.address.town || data.address.municipality
-      );
+      const address = (await response.json()).address;
+      return getCityNameByAddress(address);
     }
     return Promise.reject("City Name API error");
   });
 }
 
-function getGeolocationByCityName(cityName) {
+function getGeolocationBySearch(cityName) {
   const geolocationUrl = window.__env.geolocationUrl;
   return fetch(
-    `${geolocationUrl}?q=${cityName}&format=jsonv2`,
+    `${geolocationUrl}?q=${cityName}&format=jsonv2&addressdetails=1&country=Brazil`,
     requestSettings
   ).then(async (response) => {
     if (response.ok) {
@@ -47,10 +44,17 @@ function getGeolocationByCityName(cityName) {
       return {
         latitude: data.lat,
         longitude: data.lon,
+        cityName: getCityNameByAddress(data.address),
       };
     }
     return Promise.reject("Geolocation API error");
   });
+}
+
+function getCityNameByAddress(address) {
+  const city = address.city || address.town || address.municipality;
+  const state = address.state;
+  return `${city}, ${shortState(state)}`;
 }
 
 function getWeather({ latitude, longitude, cityName }) {

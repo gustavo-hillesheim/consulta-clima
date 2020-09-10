@@ -12,7 +12,10 @@
     <span class="main-data">
       <div class="condition-info">
         <weather-icon class="condition-icon" :conditionId="details.condition"></weather-icon>
-        <span class="condition-label">{{ details.condition | weatherCondition }}</span>
+        <span
+          class="condition-label"
+          :title="details.condition | weatherCondition"
+        >{{ details.condition | weatherCondition }}</span>
       </div>
       <span class="temperature">{{ details.temperature }}ºC</span>
     </span>
@@ -44,7 +47,6 @@ export default {
   computed: {
     cityName: {
       get() {
-        console.log(this.details);
         return this.details.city;
       },
       set(value) {
@@ -86,8 +88,15 @@ span:not(.date-details) {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   margin: 0 24px;
-  font-size: 24;
+  width: 100px;
+}
+.condition-label {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .main-data {
   margin-bottom: 24px;

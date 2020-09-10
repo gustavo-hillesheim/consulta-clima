@@ -34,9 +34,10 @@ export default {
   },
   data: () => ({
     weather: null,
-    cityName: "Blumenau,SC",
+    cityName: null,
   }),
   created() {
+    this.cityName = localStorage.getItem("cidade-consulta") || "São Paulo,SP";
     this.loadData(this.cityName);
   },
   computed: {
@@ -64,9 +65,11 @@ export default {
       }
     },
     requestData(searchData) {
-      getWeatherForecast(searchData).then(
-        (weather) => (this.weather = weather)
-      );
+      getWeatherForecast(searchData).then((weather) => {
+        this.weather = weather;
+        this.cityName = weather.dayDetails.city;
+        localStorage.setItem("cidade-consulta", this.cityName);
+      });
     },
     getForecastData(weather) {
       return {

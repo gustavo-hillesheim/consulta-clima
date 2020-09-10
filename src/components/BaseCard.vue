@@ -30,7 +30,7 @@ export default {
 .card .header {
   font-size: 24px;
   margin: 12px 24px;
-  width: fit-content;
+  text-align: start;
   height: fit-content;
 }
 
