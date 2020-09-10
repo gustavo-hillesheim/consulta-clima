@@ -28,7 +28,7 @@ export default {
 }
 
 .card .header {
-  font-size: 24px;
+  font-size: 20px;
   margin: 12px 24px;
   text-align: start;
   height: fit-content;

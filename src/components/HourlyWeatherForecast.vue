@@ -1,6 +1,9 @@
 <template>
   <div>
-    <base-select :options="chartTypeOptions" @select="chartType = $event"></base-select>
+    <base-select
+      :options="chartTypeOptions"
+      @select="chartType = $event"
+    ></base-select>
     <line-chart :key="chartConfig.id" :config="chartConfig"></line-chart>
   </div>
 </template>
@@ -46,6 +49,7 @@ export default {
       return {
         id: "hourly-forecast-" + new Date().getTime(),
         title: this.typeTranslation[this.chartType] + " ao longo do dia",
+        responsive: true,
         height: 300,
         data: this.chartData,
         labels: new Array(24).fill(null).map((_, index) => index + "h"),

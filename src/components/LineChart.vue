@@ -15,12 +15,25 @@ export default {
   },
   data: () => ({
     chart: null,
+    datasetStep: 1,
   }),
-  mounted() {
-    this.chart = new Chart(this.$refs.chart, this.chartConfig);
+  watch: {
+    datasetStep() {
+      this.updateChart();
+    },
   },
-  beforeUpdate() {
-    this.chart = new Chart(this.$refs.chart, this.chartConfig);
+  mounted() {
+    this.createChart();
+    window.addEventListener("resize", this.handleWindowSizeChange);
+    if (this.config.responsive) {
+      this.updateDatasetStep(window.innerWidth);
+    }
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.handleWindowSizeChange);
+  },
+  updated() {
+    this.updateChart();
   },
   computed: {
     chartConfig() {
@@ -49,16 +62,44 @@ export default {
     },
     data() {
       return {
-        labels: Array(...this.config.labels),
+        labels: this.labels,
         datasets: this.datasets,
       };
     },
+    labels() {
+      const datasetStep = this.datasetStep;
+      return this.config.labels.filter(
+        (label, index) => index % datasetStep === 0
+      );
+    },
     datasets() {
+      const datasetStep = this.datasetStep;
       const chartData = this.config.data.map((set) => ({
         name: set.label,
-        values: set.data,
+        values: set.data.filter((value, index) => index % datasetStep === 0),
       }));
       return chartData;
+    },
+  },
+  methods: {
+    createChart() {
+      this.chart = new Chart(this.$refs.chart, this.chartConfig);
+    },
+    updateChart() {
+      this.chart.update(this.data);
+    },
+    handleWindowSizeChange(event) {
+      if (this.config.responsive) {
+        const screenWidth = event.target.innerWidth;
+        this.updateDatasetStep(screenWidth);
+      }
+    },
+    updateDatasetStep(screenWidth) {
+      if (screenWidth <= 1400) {
+        this.datasetStep = 2;
+      } else {
+        this.datasetStep = 1;
+      }
     },
   },
 };

@@ -5,6 +5,8 @@ import BaseCard from "./components/BaseCard";
 import BaseSelect from "./components/BaseSelect";
 import LineChart from "./components/LineChart";
 import WeatherIcon from "./components/WeatherIcon";
+import ConditionInfo from "./components/ConditionInfo";
+
 import filters from "./filters";
 
 Vue.config.productionTip = false;
@@ -25,6 +27,7 @@ Vue.component(BaseCard.name, BaseCard);
 Vue.component(BaseSelect.name, BaseSelect);
 Vue.component(LineChart.name, LineChart);
 Vue.component(WeatherIcon.name, WeatherIcon);
+Vue.component(ConditionInfo.name, ConditionInfo);
 
 Object.keys(filters).forEach((filterName) =>
   Vue.filter(filterName, filters[filterName])

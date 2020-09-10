@@ -9,20 +9,19 @@
       />
       <span class="date-details">{{ dateDetails }}</span>
     </template>
-    <span class="main-data">
-      <div class="condition-info" :title="details.condition | weatherCondition">
-        <weather-icon class="condition-icon" :conditionId="details.condition"></weather-icon>
-        <span class="condition-label">{{ details.condition | weatherCondition }}</span>
+    <div class="content">
+      <div class="main-data">
+        <condition-info :conditionId="details.condition" style="margin: 0 24px"></condition-info>
+        <span class="temperature">{{ details.temperature }}ºC</span>
       </div>
-      <span class="temperature">{{ details.temperature }}ºC</span>
-    </span>
-    <div class="complementary-data">
-      <span class="min-temperature data-one">Mínima: {{ details.minTemperature }}ºC</span>
-      <span class="max-temperature data-two">Máxima: {{ details.maxTemperature }}ºC</span>
-      <span class="clouds data-three">Nuvens: {{ details.clouds }}%</span>
-      <span class="wind-speed data-four">Ventos: {{ details.windSpeed }}km/h</span>
-      <span class="humidity data-five">Humidade: {{ details.currentHumidity }}%</span>
-      <span class="rain data-six">Chuva: {{ details.currentRain }}mm/h</span>
+      <div class="complementary-data">
+        <span class="min-temperature data-one">Mínima: {{ details.minTemperature }}ºC</span>
+        <span class="max-temperature data-two">Máxima: {{ details.maxTemperature }}ºC</span>
+        <span class="clouds data-three">Nuvens: {{ details.clouds }}%</span>
+        <span class="wind-speed data-four">Ventos: {{ details.windSpeed }}km/h</span>
+        <span class="humidity data-five">Humidade: {{ details.currentHumidity }}%</span>
+        <span class="rain data-six">Chuva: {{ details.currentRain }}mm/h</span>
+      </div>
     </div>
     <hourly-weather-forecast :hourlyForecasts="details.hourlyForecast"></hourly-weather-forecast>
   </base-card>
@@ -59,39 +58,36 @@ export default {
 };
 </script>
 <style scoped>
-.city-search-input:hover {
-  border-bottom-color: black;
-}
 .complementary-data {
+  margin: auto 12px;
+  width: 100%;
+  height: fit-content;
   display: grid;
   grid-template-columns: 33%;
   grid-template-rows: auto;
+}
+.content {
+  display: flex;
+  flex-direction: row;
 }
 .date-details::before {
   content: " - ";
 }
 span:not(.date-details) {
-  font-size: 18px;
-  margin: 4px 0;
-}
-.condition-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin: 0 24px;
-  width: 100px;
-}
-.condition-label {
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  margin: 2px 0;
 }
 .main-data {
-  margin-bottom: 24px;
+  margin: 12px;
   display: flex;
   flex-direction: row;
+}
+@media screen and (min-width: 1001px) {
+  .content {
+    flex-direction: column;
+  }
+  .complementary-data {
+    margin-bottom: 12px;
+  }
 }
 .temperature {
   font-weight: 200;

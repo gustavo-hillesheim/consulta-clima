@@ -9,12 +9,14 @@
       <daily-weather-forecast class="week-weather" :forecasts="weekForecasts"></daily-weather-forecast>
     </div>
     <div class="forecasts">
-      <weather-forecast
-        class="forecast"
-        v-for="forecast of weather.forecast"
-        :key="forecast.date"
-        :forecast="forecast"
-      ></weather-forecast>
+      <div class="container">
+        <weather-forecast
+          class="forecast"
+          v-for="forecast of weather.forecast"
+          :key="forecast.date"
+          :forecast="forecast"
+        ></weather-forecast>
+      </div>
     </div>
   </div>
 </template>
@@ -67,26 +69,47 @@ export default {
   flex: 5;
   margin: 12px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 .current-weather {
-  margin-right: 6px;
+  margin-bottom: 12px;
   min-width: 0;
   flex: 1;
 }
 .week-weather {
-  margin-left: 6px;
   min-width: 0;
   flex: 1;
 }
 .forecasts {
   flex: 5;
-  display: flex;
-  flex-direction: row;
+  overflow-x: auto;
   margin: 0px 6px 12px 6px;
 }
+.forecasts .container {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+}
 .forecasts .forecast {
-  flex: 1;
+  width: 200px;
   margin: 0 6px;
+}
+@media screen and (min-width: 1001px) {
+  .main {
+    flex-direction: row;
+  }
+  .current-weather {
+    margin-right: 12px;
+    margin-bottom: 0;
+  }
+  .forecasts .container {
+    display: flex;
+    flex-direction: row;
+    width: unset;
+  }
+  .forecasts .forecast {
+    flex: 1;
+    margin: 0 6px;
+  }
 }
 </style>

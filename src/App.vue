@@ -23,7 +23,8 @@ export default {
 <style>
 body {
   margin: 0;
-  font-family: monospace;
+  font-family: "Roboto", "monospace";
+  font-size: 14px;
   background: linear-gradient(
     90deg,
     rgba(63, 175, 247, 0.8) 0%,
@@ -36,7 +37,7 @@ body {
 }
 
 .search-input {
-  font-size: 24px;
+  font-size: 20px;
   border: none;
   border-bottom: solid rgba(0, 0, 0, 0.3) 1px;
   text-align: center;
@@ -59,6 +60,5 @@ body {
   height: fit-content;
   transform: translate(-50%, -50%);
   text-align: center;
-  font-size: 20px;
 }
 </style>
