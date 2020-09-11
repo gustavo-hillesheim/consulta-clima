@@ -24,7 +24,7 @@ export default {
 body {
   margin: 0;
   font-family: "Roboto", "monospace";
-  font-size: 14px;
+  font-size: 16px;
   background: linear-gradient(
     90deg,
     rgba(63, 175, 247, 0.8) 0%,

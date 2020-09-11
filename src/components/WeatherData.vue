@@ -109,7 +109,6 @@ export default {
   }
   .forecasts .forecast {
     flex: 1;
-    margin: 0 6px;
   }
 }
 </style>
