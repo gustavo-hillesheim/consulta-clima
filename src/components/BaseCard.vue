@@ -22,7 +22,7 @@ export default {
 .card {
   background-color: white;
   border-radius: 12px;
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 4px 8px;
+  box-shadow: rgba(0, 0, 0, 0.6) 0px 2px 4px;
   display: flex;
   flex-direction: column;
 }
